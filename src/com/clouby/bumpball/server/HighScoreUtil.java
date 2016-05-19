@@ -41,7 +41,7 @@ public class HighScoreUtil {
 
 
 		for (Entity result : pq.asIterable()) {
-			int score = (int) result.getProperty("score");
+			int score = ((Long) result.getProperty("score")).intValue();
 			String name  = (String) result.getProperty("name");
 			long time  = (long) result.getProperty("time");
 			
@@ -57,8 +57,25 @@ public class HighScoreUtil {
 		Query query = new Query(ENTITY_NAME);
 		PreparedQuery pq = datastore.prepare(query);
 		
-		//datastore.delete(pq);
+		for (Entity result : pq.asIterable()) {
+			datastore.delete(result.getKey());
+		}
 
+	}
+	
+	public static void insertNewHighScore(int score, String name){
+		// Places the location parameters in the same entity group as the Location record
+		Entity highscoreInst = new Entity(ENTITY_NAME);
+
+
+		highscoreInst.setProperty("time", System.currentTimeMillis());
+		highscoreInst.setProperty("name", name);
+		highscoreInst.setProperty("score", score);
+
+		// Now put the entry to Google data store
+		DatastoreService datastore =
+				DatastoreServiceFactory.getDatastoreService();
+		datastore.put(highscoreInst);
 	}
 
 
