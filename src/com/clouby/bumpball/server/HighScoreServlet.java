@@ -1,5 +1,8 @@
 package com.clouby.bumpball.server;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Date;
 
@@ -10,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
@@ -23,7 +25,22 @@ public class HighScoreServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 3651704760517377444L;
 	static final String ENTITY_NAME = "HighScoreRecord";
-	static final String PASSWORD = "*******";
+	static  String PASSWORD = "";
+
+	public void init() {
+		try {
+			@SuppressWarnings("resource")
+			BufferedReader br = new BufferedReader(new FileReader("password.txt"));
+			String line = br.readLine();
+
+			if (line != null) {
+				PASSWORD = line;
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 
 	@Override
@@ -35,6 +52,13 @@ public class HighScoreServlet extends HttpServlet {
 		try {
 			jsonEntity.put("score", container.getScore());
 			jsonEntity.put("name", container.getName());
+			jsonEntity.put("password",PASSWORD);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			jsonEntity.write(resp.getWriter());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
