@@ -52,7 +52,6 @@ public class HighScoreServlet extends HttpServlet {
 		try {
 			jsonEntity.put("score", container.getScore());
 			jsonEntity.put("name", container.getName());
-			jsonEntity.put("password",PASSWORD);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
