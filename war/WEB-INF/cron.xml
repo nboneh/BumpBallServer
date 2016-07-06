@@ -2,7 +2,7 @@
    <cron>
     <url>/highscorecleanup</url>
     <description>Weekly cleanup</description>
-    <schedule>every 24 hours</schedule>
+    <schedule>every 24 hours </schedule>
   </cron>
 </cronentries>
     
