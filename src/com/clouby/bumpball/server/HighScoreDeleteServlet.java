@@ -1,3 +1,4 @@
+
 package com.clouby.bumpball.server;
 
 import java.io.IOException;
@@ -15,6 +16,6 @@ public class HighScoreDeleteServlet extends HttpServlet{
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		HighScoreUtil.deleteCurrentHighscore();
+		HighScoreUtil.deleteOnlineHighScores();
 	}
 }

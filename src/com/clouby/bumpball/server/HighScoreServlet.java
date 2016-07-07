@@ -3,11 +3,14 @@ package com.clouby.bumpball.server;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.clouby.bumpball.server.HighScoreUtil.HighScoreContainer;
+import com.google.appengine.labs.repackaged.org.json.JSONArray;
 import com.google.appengine.labs.repackaged.org.json.JSONObject;
 import com.google.appengine.labs.repackaged.org.json.JSONException;
 
@@ -39,32 +42,33 @@ public class HighScoreServlet extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		HighScoreUtil.HighScoreContainer container = HighScoreUtil.getCurrentHighScore();
-		JSONObject jsonEntity = new JSONObject(); 
+		List<HighScoreUtil.HighScoreContainer> containers = HighScoreUtil.getCurrentHighScores();
+		JSONArray entities = new JSONArray();
 
+		for (HighScoreContainer container :containers) {
+			try {
+				JSONObject jsonEntity = new JSONObject(); 
+				jsonEntity.put("score", container.getScore());
+				jsonEntity.put("name", container.getName());
+				entities.put(jsonEntity);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+
+		}
+		
 		try {
-			jsonEntity.put("score", container.getScore());
-			jsonEntity.put("name", container.getName());
+			entities.write(resp.getWriter());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		try {
-			jsonEntity.write(resp.getWriter());
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	@Override
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-		int score = Integer.parseInt(req.getParameter("score"));
-		int currentHighScore =  HighScoreUtil.getCurrentHighScore().getScore();
-		if(req.getParameter("pass").equals(PASSWORD) && score > currentHighScore){
-			HighScoreUtil.deleteCurrentHighscore();
-			HighScoreUtil.insertNewHighScore(score,req.getParameter("name"));
+		if(req.getParameter("pass").equals(PASSWORD) ){
+			HighScoreUtil.insertNewHighScore(Integer.parseInt(req.getParameter("score")),req.getParameter("name"));
 		}
 	}
 

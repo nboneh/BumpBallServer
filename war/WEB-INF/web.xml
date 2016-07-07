@@ -11,25 +11,20 @@
     <servlet-class>com.clouby.bumpball.server.HighScoreServlet</servlet-class>
   </servlet>
   
-  <servlet>
-     <servlet-name>HighScoreCleanUp</servlet-name>
-    <servlet-class>com.clouby.bumpball.server.HighScoreCleanupServlet</servlet-class>
-  </servlet>
-  
     <servlet>
      <servlet-name>HighScoreDelete</servlet-name>
     <servlet-class>com.clouby.bumpball.server.HighScoreDeleteServlet</servlet-class>
   </servlet>
   
+        <servlet>
+     <servlet-name>MadeHighScoreServlet</servlet-name>
+    <servlet-class>com.clouby.bumpball.server.MadeHighScoreServlet</servlet-class>
+  </servlet>
+  
+  
   <servlet-mapping>
     <servlet-name>HighScore</servlet-name>
     <url-pattern>/highscore</url-pattern>
-  </servlet-mapping>
-  
-  
-   <servlet-mapping>
-    <servlet-name>HighScoreCleanUp</servlet-name>
-    <url-pattern>/highscorecleanup</url-pattern>
   </servlet-mapping>
   
    <servlet-mapping>
@@ -37,16 +32,12 @@
     <url-pattern>/highscoredelete</url-pattern>
   </servlet-mapping>
   
+      <servlet-mapping>
+    <servlet-name>MadeHighScoreServlet</servlet-name>
+    <url-pattern>/madehighscore</url-pattern>
+  </servlet-mapping>
   
-  <security-constraint>
-    <web-resource-collection>
-        <web-resource-name>cron</web-resource-name>
-        <url-pattern>/highscorecleanup</url-pattern>
-    </web-resource-collection>
-    <auth-constraint>
-        <role-name>admin</role-name>
-    </auth-constraint>
-</security-constraint>
+  
 
     <security-constraint>
             <web-resource-collection>
